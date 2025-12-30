@@ -172,8 +172,11 @@ async function handleHome(request) {
             };
           }
 
+          // Track if initial animation has played
+          let initialAnimationPlayed = false;
+
           // Render the dot grid
-          function renderDotGrid() {
+          function renderDotGrid(skipAnimation = false) {
             const progress = calculateYearProgress();
             const dotGrid = document.getElementById('dotGrid');
 
@@ -208,8 +211,13 @@ async function handleHome(request) {
                 dot.classList.add('dot-empty');
               }
 
-              // Stagger animation
-              dot.style.animationDelay = \`\${i * 2}ms\`;
+              // Only animate on initial load, not on resize
+              if (!skipAnimation && !initialAnimationPlayed) {
+                dot.style.animationDelay = \`\${i * 2}ms\`;
+              } else {
+                // Skip animation by setting it to none
+                dot.style.animation = 'none';
+              }
 
               // Tooltip
               const dayNumber = i + 1;
@@ -217,6 +225,11 @@ async function handleHome(request) {
               dot.title = \`Day \${dayNumber} - \${date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}\`;
 
               dotGrid.appendChild(dot);
+            }
+
+            // Mark that initial animation has played
+            if (!skipAnimation) {
+              initialAnimationPlayed = true;
             }
           }
 
@@ -240,21 +253,21 @@ async function handleHome(request) {
             renderDotGrid();
             updateStats();
 
-            // Update every minute
+            // Update every minute (skip animation on updates)
             setInterval(() => {
-              renderDotGrid();
+              renderDotGrid(true);
               updateStats();
             }, 60000);
 
             // Update stats every second for smoother countdown
             setInterval(updateStats, 1000);
 
-            // Re-render on resize
+            // Re-render on resize (skip animation to prevent retrigger on mobile browser chrome changes)
             let resizeTimeout;
             window.addEventListener('resize', () => {
               clearTimeout(resizeTimeout);
               resizeTimeout = setTimeout(() => {
-                renderDotGrid();
+                renderDotGrid(true);
               }, 250);
             });
           }
