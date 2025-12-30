@@ -39,12 +39,35 @@ npm run dev
 # Run tests
 npm test
 
-# Build for production
-npm run build
+# Run E2E tests
+npm run test:e2e
+
+# Test deployed site
+npm run test:deployed
 ```
 
 ### Environment Variables
 - `CLOUDFLARE_API_TOKEN`: Used for deployment (set in GitHub Secrets)
+
+## ✨ Features
+
+- **Visual Year Progress**: See your entire year as a beautiful grid of dots
+- **Minute-Level Accuracy**: Half dots show progress through the current day
+- **Real-Time Updates**: Automatically updates every minute
+- **Gorgeous Animations**: Smooth fade-ins, dot pops, and pulsing effects
+- **Fully Responsive**: Beautiful on mobile and desktop
+- **Client-Side Only**: Runs entirely in your browser, works anywhere
+- **Timezone Aware**: Shows progress in your local timezone
+
+## 🎨 Design
+
+The app displays 365 (or 366 in leap years) dots arranged in a grid:
+- **Filled dots** (bright blue gradient): Days that have passed
+- **Half dots** (half filled): The current day after noon
+- **Empty dots** (subtle gray): Future days
+- **Pulsing dot**: The current day
+
+Each dot has a smooth pop-in animation on load, and the year title shimmers with a gradient effect.
 
 ## 📝 Requirements
 
